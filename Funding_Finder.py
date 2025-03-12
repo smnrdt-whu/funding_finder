@@ -48,6 +48,10 @@ if "chat_visibility" not in st.session_state:
     st.session_state.chat_visibility = False
 if "api_visibility" not in st.session_state:
     st.session_state.api_visibility = False
+if "model_disable" not in st.session_state:
+    st.session_state.model_disable = False
+if "api_disable" not in st.session_state:
+    st.session_state.api_disable = False
 
 st.header("Startup Funding Finder")
 
@@ -55,19 +59,22 @@ st.header("Startup Funding Finder")
 model = st.segmented_control(
     "Choose a model",
     options=["Hugging Face (free)", "OpenAI (high performance)"],
+    disabled=st.session_state.model_disable,
 )
-
 if model:
     st.session_state.api_visibility = True
-    choice = model
+
+def disable_model_and_api():
+    st.session_state.model_disable = True
+    st.session_state.api_disable = True
 
 # OpenAI API key input
 if st.session_state.api_visibility:
-    key = st.text_input("Please enter your API key:", type="password")
-    if st.button("Process"):
+    key = st.text_input("Please enter your API key:", type="password", disabled=st.session_state.api_disable)
+    if st.button("Process", on_click=disable_model_and_api):
         if key != "":
-            st.write("API key ✅")
             st.session_state.chat_visibility = True
+            st.write("API key ✅ Refresh page to change model or API key.")
 
 # Prompt input
 if st.session_state.chat_visibility:
