@@ -41,8 +41,7 @@ def handle_userinput(businessModel):
             prompt=chat_prompt,
         )
     fundingSources = chain.run(businessModel)
-    st.write(fundingSources[fundingSources.index("Assistant:") + len("Assistant:"):])
-
+    st.write(fundingSources)
 
 # Define visibility
 if "chat_visibility" not in st.session_state:
@@ -72,6 +71,6 @@ if st.session_state.api_visibility:
 
 # Prompt input
 if st.session_state.chat_visibility:
-    user_question = st.text_input("Please describe your startup idea in one sentence:")
+    user_question = st.text_input("Please describe your startup idea:")
     if user_question:
         handle_userinput(user_question)
